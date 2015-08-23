@@ -8,7 +8,8 @@ namespace Config
   const char
     *Org = "Jedi98",
     *App = "Antenna Analyzer",
-    *DOM_ENCODING = "UTF-8";
+    *DOM_ENCODING = "UTF-8",
+    *SERIAL_DEV_FILTER = "ttyUSB*;tty.usbserial*;rfcomm*";
 
   QString dir_data;
   double swr_max, swr_bw_max, Z_Target;

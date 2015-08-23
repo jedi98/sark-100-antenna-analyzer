@@ -8,7 +8,8 @@ namespace Config
     extern QString dir_data;
     extern double swr_max, swr_bw_max, Z_Target;
     extern const char
-      *Org,*App,*DOM_ENCODING;
+      *Org,*App,*DOM_ENCODING,
+      *SERIAL_DEV_FILTER;
 
     void read();
     void write();

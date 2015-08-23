@@ -62,7 +62,7 @@ setlinebuf(stdout);
 
     ui->band_cb->setCurrentIndex(16);
 
-    ui->scan_data->setHorizontalHeaderLabels(QStringList() << "freq" << "SWR" << "Z" << "R" << "X" << "X2");
+    ui->scan_data->setHorizontalHeaderLabels(QStringList() << "freq" << "SWR" << "Z" << "R" << "X");
 
     Slot_scanDummyBtn_click();
 
@@ -417,7 +417,7 @@ void MainWindow::Slot_menuDevice_Show()
 {
   unsigned int i;
   //QDir dir("/dev","ttyUSB*");
-  QDir dir("/dev","ttyUSB*;rfcomm*",QDir::Name | QDir::IgnoreCase,QDir::System);
+  QDir dir("/dev",Config::SERIAL_DEV_FILTER,QDir::Name | QDir::IgnoreCase,QDir::System);
 
 printf("dir: %d\n",dir.count());
   ui->menuDevice->clear();

@@ -14,7 +14,7 @@ public:
     SerialLink(const char *dev,int speed);
     ~SerialLink();
 
-    void TxCmd(char *cmd);
+    void TxCmd(const char *cmd);
     int RxLine();
     int RxFlush();
 
