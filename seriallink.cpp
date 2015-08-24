@@ -28,11 +28,11 @@ printf("SerialLink::Init: dev %s\n",dev);
         cfmakeraw(&termattr);
 printf("\tc_cflag=%x\n",termattr.c_cflag);
         termattr.c_oflag &= ~(ONLCR);
-#if defined(__APPLE__) && defined(__MACH__)
+//#if defined(__APPLE__) && defined(__MACH__)
         termattr.c_cflag &= ~(CRTSCTS|PARENB|CSTOPB);
-#else
-        termattr.c_cflag &= ~(CRTSCTS|PARENB|CSTOPB|CBAUD);
-#endif
+//#else
+//        termattr.c_cflag &= ~(CRTSCTS|PARENB|CSTOPB|CBAUD);
+//#endif
         termattr.c_cflag |= CS8 | CLOCAL;
 printf("\tc_cflag=%x\n",termattr.c_cflag);
         switch (speed)

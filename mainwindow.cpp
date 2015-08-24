@@ -13,7 +13,7 @@
 #include "ui_mainwindow.h"
 
 const Version
-    MainWindow::version = Version(0,9,9,"");
+    MainWindow::version = Version(0,9,10,"rc1");
 
 ScanData scandata;
 
