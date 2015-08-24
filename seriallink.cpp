@@ -47,16 +47,6 @@ printf("\tc_cflag=%x\n",termattr.c_cflag);
           case 38400: cfsetspeed(&termattr, B38400); break;
           case 57600: cfsetspeed(&termattr, B57600); break;
           case 115200: cfsetspeed(&termattr, B115200); break;
-//          case 300: termattr.c_cflag |= B300; break;
-//          case 600: termattr.c_cflag |= B600; break;
-//          case 1200: termattr.c_cflag |= B1200; break;
-//          case 2400: termattr.c_cflag |= B2400; break;
-//          case 4800: termattr.c_cflag |= B4800; break;
-//          case 9600: termattr.c_cflag |= B9600; break;
-//          case 19200: termattr.c_cflag |= B19200; break;
-//          case 38400: termattr.c_cflag |= B38400; break;
-//          case 57600: termattr.c_cflag |= B57600; break;
-//          case 115200: termattr.c_cflag |= B115200; break;
         }
 printf("\tc_cflag=%x\n",termattr.c_cflag);
         tcsetattr(devfd, TCSANOW, &termattr);
