@@ -17,24 +17,36 @@ You should have received a copy of the GNU General Public License
 along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DOM_H
-#define DOM_H
+#ifndef DUMMYDEV_H
+#define DUMMYDEV_H
 
-#include <QtXml/QtXml>
+#ifdef ENABLE_DUMMY_DEV
 
-#define toDom_Text(d,p,n,v) { QDomElement el = (d).createElement(n);\
-  el.appendChild(doc.createTextNode(QString("%1").arg(v)));\
-  (p).appendChild(el); }
+#include <QString>
 
-#define toDom_Bytes(d,p,n,v) { QDomElement el = (d).createElement(n);\
-  el.appendChild(doc.createTextNode(QString(v)));\
-  (p).appendChild(el); }
-
-/*
-class CDom
+class DummyDev
 {
-  static const char
-    *
+public:
+    DummyDev();
+    //~DummyDev();
+
+    int RxLine();
+    int RxFlush();
+
+    bool IsUp();
+
+    QString devname;
+
+protected:
+    int devfd;
+
+    char rxbuff[128];
+    int rxbufflen;
+
+    const char *dummy_data;
+    int dummy_pos;
 };
-*/
+
 #endif
+
+#endif // DUMMYDEV_H

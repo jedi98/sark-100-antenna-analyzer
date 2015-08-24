@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     graphcursor.cpp \
     eventreceiver.cpp \
     config.cpp \
-    settingsdlg.cpp
+    settingsdlg.cpp \
+    serialdev.cpp \
+    dummydev.cpp
 
 HEADERS  += mainwindow.h \
     scandata.h \
@@ -33,7 +35,9 @@ HEADERS  += mainwindow.h \
     eventreceiver.h \
     version.h \
     config.h \
-    settingsdlg.h
+    settingsdlg.h \
+    serialdev.h \
+    dummydev.h
 
 FORMS    += mainwindow.ui \
     settingsdlg.ui

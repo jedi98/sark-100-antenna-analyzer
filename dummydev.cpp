@@ -17,24 +17,46 @@ You should have received a copy of the GNU General Public License
 along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DOM_H
-#define DOM_H
+#include "config.h"
 
-#include <QtXml/QtXml>
+#ifdef ENABLE_DUMMY_DEV
 
-#define toDom_Text(d,p,n,v) { QDomElement el = (d).createElement(n);\
-  el.appendChild(doc.createTextNode(QString("%1").arg(v)));\
-  (p).appendChild(el); }
+#include "dummydev.h"
 
-#define toDom_Bytes(d,p,n,v) { QDomElement el = (d).createElement(n);\
-  el.appendChild(doc.createTextNode(QString(v)));\
-  (p).appendChild(el); }
-
-/*
-class CDom
+DummyDev::DummyDev()
 {
-  static const char
-    *
-};
-*/
+    dummy_data = "";
+    dummy_pos = 0;
+}
+
+bool DummyDev::IsUp()
+{
+    return true;
+}
+
+int DummyDev::RxLine()
+{
+    for (rxbufflen=0; dummy_data[dummy_pos]; dummy_pos++)
+    {
+        switch (dummy_data[dummy_pos])
+        {
+        case '\n':
+            rxbuff[rxbufflen]='\0';
+            dummy_pos++;
+            return 0;
+        case '\0':
+            rxbuff[rxbufflen]='\0';
+            return 3;
+        default:
+            rxbuff[rxbufflen++]=dummy_data[dummy_pos];
+        }
+    }
+    return 3;
+}
+
+int DummyDev::RxFlush()
+{
+    return 1;
+}
+
 #endif
