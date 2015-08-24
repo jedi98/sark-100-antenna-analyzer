@@ -56,12 +56,6 @@ protected:
 
     //char rxbuff[128];
     //int rxbufflen;
-
-private:
-#ifdef DUMMY_DEV
-//    const char *dummy_data;
-//    int dummy_pos;
-#endif
 };
 
 #endif // SERIALLINK_H
