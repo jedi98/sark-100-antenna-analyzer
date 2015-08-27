@@ -1,4 +1,4 @@
-**Thanks To** Adam Coddington (http://coddingtonbear.net) for sorting out the changes for OSX and driving the push onte github. Also for writing better instructions than my originals.
+**Thanks To** Adam Coddington (http://coddingtonbear.net) for sorting out the changes for OSX and driving the push onto github. Also for writing better instructions than my originals.
 
 SARK 100 / MINI 60 Antenna Analyzer GUI
 =======================================
