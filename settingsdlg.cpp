@@ -35,6 +35,11 @@ SettingsDlg::SettingsDlg(QWidget *parent) :
     ui->Z_Target->setValue(Config::Z_Target);
 }
 
+SettingsDlg::~SettingsDlg()
+{
+    delete ui;
+}
+
 void SettingsDlg::Slot_Accept()
 {
     using namespace Config;
@@ -45,7 +50,3 @@ void SettingsDlg::Slot_Accept()
     write();
 }
 
-SettingsDlg::~SettingsDlg()
-{
-    delete ui;
-}

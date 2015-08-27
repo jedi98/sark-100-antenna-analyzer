@@ -42,20 +42,11 @@ public:
     //~SerialLink();
 
     void TxCmd(const char *cmd);
-    //int RxLine();
-    //int RxFlush();
 
-    //bool IsUp();
     void Cmd_Scan(long fstart, long fend, long fstep, bool useraw, EventReceiver *erx);
     void Cmd_Off(EventReceiver *erx);
 
-    //QString devname;
-
 protected:
-    //int devfd;
-
-    //char rxbuff[128];
-    //int rxbufflen;
 };
 
 #endif // SERIALLINK_H

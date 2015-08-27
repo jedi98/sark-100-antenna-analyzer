@@ -148,7 +148,6 @@ void MainWindow::draw_graph1()
     //if (ui->canvas1->xtrace->enabled && scandata.points[scandata.X_max_idx].X>scale->vmax) scale->vmax=scandata.points[scandata.X_max_idx].X;
     if (ui->canvas1->xtrace->enabled) scale->Expand(scandata.points[scandata.X_min_idx].X,scandata.points[scandata.X_max_idx].X);
     if (ui->canvas1->rtrace->enabled && scandata.points[scandata.R_max_idx].R>scale->vmax) scale->vmax=scandata.points[scandata.R_max_idx].R;
-    //if (ui->canvas1->x2trace->enabled && scandata.points[scandata.X2_min_idx].X2<scale->vmin) scale->vmin=scandata.points[scandata.X2_min_idx].X2;
     if (scale->vmax==0.0) scale->vmax=1.0;
     scale->SetIncAuto();
     scale->SetMinAuto();
@@ -164,10 +163,6 @@ void MainWindow::draw_graph1()
     ui->canvas1->xtrace->points.resize(scandata.points.size());
     for (unsigned int i=0;i<scandata.points.size();i++)
         ui->canvas1->xtrace->points[i] = scandata.points[i].X;
-
-//    ui->canvas1->x2trace->points.resize(scandata.points.size());
-//    for (unsigned int i=0;i<scandata.points.size();i++)
-//        ui->canvas1->x2trace->points[i] = scandata.points[i].X2;
 
     ui->canvas1->rtrace->points.resize(scandata.points.size());
     for (unsigned int i=0;i<scandata.points.size();i++)
@@ -313,7 +308,6 @@ void MainWindow::Slot_plot_change(int)
 {
     ui->canvas1->ztrace->enabled = ui->plotz_chk->checkState()==Qt::Checked;
     ui->canvas1->xtrace->enabled = ui->plotx_chk->checkState()==Qt::Checked;
-    //ui->canvas1->x2trace->enabled = ui->plotx2_chk->checkState()==Qt::Checked;
     ui->canvas1->rtrace->enabled = ui->plotr_chk->checkState()==Qt::Checked;
     draw_graph1();
 //    ui->canvas1->update();

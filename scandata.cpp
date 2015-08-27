@@ -77,14 +77,11 @@ void ScanData::UpdateStats()
         if (points[i].X > points[X_max_idx].X) { X_max_idx=i; }
         if (points[i].R < points[R_min_idx].R) { R_min_idx=i; }
         if (points[i].R > points[R_max_idx].R) { R_max_idx=i; }
-        //if (points[i].X2 < points[X2_min_idx].X2) { X2_min_idx=i; }
-        //if (points[i].X2 > points[X2_max_idx].X2) { X2_max_idx=i; }
     }
     for (int i=swr_bw_lo_idx=swr_min_idx;i>=0 && i<(int)points.size() && points[i].swr<=Config::swr_bw_max;i--)
         swr_bw_lo_idx=i;
     for (int i=swr_bw_hi_idx=swr_min_idx;i<(int)points.size() && points[i].swr<=Config::swr_bw_max;i++)
         swr_bw_hi_idx=i;
-
 
 //fflush(stdout);
 }
