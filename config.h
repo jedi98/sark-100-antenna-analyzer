@@ -23,6 +23,12 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include <QString>
 
 //#define ENABLE_DUMMY_DEV
+//#define ENABLE_TEST_DATA
+
+#ifdef WIN32
+#define setlinebuf(a)
+#define poll WSAPoll
+#endif
 
 namespace Config
 {

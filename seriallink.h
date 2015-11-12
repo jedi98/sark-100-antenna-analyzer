@@ -28,6 +28,8 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include "serialdev.h"
 #endif
 
+#include "scandata.h"
+
 #define FMIN 1000000
 #define FMAX 60000000
 
@@ -44,7 +46,10 @@ public:
     void TxCmd(const char *cmd);
 
     void Cmd_Scan(long fstart, long fend, long fstep, bool useraw, EventReceiver *erx);
+    void Cmd_On(EventReceiver *erx);
     void Cmd_Off(EventReceiver *erx);
+    void Cmd_Freq(long f, EventReceiver *erx);
+    void Cmd_Raw(Sample &sample, EventReceiver *erx);
 
 protected:
 };

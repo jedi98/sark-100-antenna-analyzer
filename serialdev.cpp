@@ -22,11 +22,13 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h>
 
 #include <errno.h>
+#ifndef WIN32
 #include <poll.h>
 
 #include <termios.h>
-#include <fcntl.h>
 #include <sys/ioctl.h>
+#endif
+#include <fcntl.h>
 
 #include "config.h"
 #include "serialdev.h"

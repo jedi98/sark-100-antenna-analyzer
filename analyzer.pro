@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     config.cpp \
     settingsdlg.cpp \
     serialdev.cpp \
-    dummydev.cpp
+    dummydev.cpp \
+    bargraph.cpp
 
 HEADERS  += mainwindow.h \
     scandata.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     config.h \
     settingsdlg.h \
     serialdev.h \
-    dummydev.h
+    dummydev.h \
+    bargraph.h
 
 FORMS    += mainwindow.ui \
     settingsdlg.ui

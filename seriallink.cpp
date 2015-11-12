@@ -111,7 +111,7 @@ void SerialLink::Cmd_Scan(long fstart, long fend, long fstep, bool useraw, Event
     for (;state<10;)
     {
         r = RxLine();
-printf("RxLine=%d\n",r);
+//printf("RxLine=%d\n",r);
         if (r==0)
         {
 printf("RxLine: %s (%d)\n",rxbuff,rxbufflen);
@@ -168,6 +168,44 @@ printf("f=%ld\n",frequency);
     scandata.UpdateStats();
 }
 
+void SerialLink::Cmd_On(EventReceiver *erx)
+{
+    int state = 0,r;
+
+    //RxFlush();
+
+    TxCmd("on\r");
+
+    for (;state<10;)
+    {
+        r = RxLine();
+printf("RxLine=%d\n",r);
+        if (r==0)
+        {
+printf("RxLine: %s (%d)\n",rxbuff,rxbufflen);
+printf("state: %d\n",state);
+            switch (state)
+            {
+            case 0:
+                if (strcmp(rxbuff,"OK")==0)
+                {
+                    erx->RaiseEvent(EventReceiver::progress_event, 100);
+                    state=10;    //Results
+                }
+                else if (strncmp(rxbuff,"Error:",5)==0)
+                {
+                    state=10;   //Error
+                }
+                else
+                    state=0;   //Garbage ? Ignore
+                break;
+            }
+        }
+        else
+            state=10;   //Timeout
+    }
+}
+
 void SerialLink::Cmd_Off(EventReceiver *erx)
 {
     int state = 0,r;
@@ -198,6 +236,85 @@ printf("state: %d\n",state);
                 }
                 else
                     state=0;   //Garbage ? Ignore
+                break;
+            }
+        }
+        else
+            state=10;   //Timeout
+    }
+}
+
+void SerialLink::Cmd_Freq(long f, EventReceiver *)
+{
+    char cmd[64];
+    int state = 0,r;
+
+    //RxFlush();
+
+    sprintf(cmd,"freq %ld\r", f);
+    TxCmd(cmd);
+
+    for (;state<10;)
+    {
+        r = RxLine();
+printf("RxLine=%d\n",r);
+        if (r==0)
+        {
+printf("RxLine: %s (%d)\n",rxbuff,rxbufflen);
+printf("state: %d\n",state);
+            switch (state)
+            {
+            case 0:
+            if (strcmp(rxbuff,"OK")==0)
+            {
+                //erx->RaiseEvent(EventReceiver::progress_event, 100);
+                state=10;    //Results
+            }
+            else if (strncmp(rxbuff,"Error:",5)==0)
+            {
+                state=10;   //Error
+            }
+            else
+                state=0;   //Garbage ? Ignore
+            break;
+            }
+        }
+        else
+            state=10;   //Timeout
+    }
+}
+
+void SerialLink::Cmd_Raw(Sample &sample, EventReceiver *)
+{
+    //char cmd[64];
+    int state = 0,r;
+
+    //RxFlush();
+
+    TxCmd("raw\r");
+
+    for (;state<10;)
+    {
+        r = RxLine();
+printf("RxLine=%d\n",r);
+        if (r==0)
+        {
+printf("RxLine: %s (%d)\n",rxbuff,rxbufflen);
+printf("state: %d\n",state);
+            switch (state)
+            {
+            case 0:
+                double vf,vr,vz,va;
+                sscanf(rxbuff,"%lf,%lf,%lf,%lf",&vf,&vr,&vz,&va);
+                sample.fromRaw(vf,vr,vz,va);
+state=1;    //End of Results
+                break;
+            case 1:
+                if (strcmp(rxbuff,">>")==0)
+                {
+                    //erx->RaiseEvent(EventReceiver::progress_event, 100);
+                    state=10;   //Done
+                }
                 break;
             }
         }

@@ -34,6 +34,14 @@ Sample::Sample()
     X = 0.0;
 }
 
+void Sample::fromRaw(double vf,double vr,double vz,double va)
+{
+    swr = (vf + vr) / (vf - vr);
+    Z = 50.0 * vz/va;
+    R = ((2500.0 + Z*Z) * swr)/(50.0 * (swr*swr + 1));
+    X = Z>R ? sqrt(Z*Z - R*R) : -sqrt(-Z*Z + R*R);
+}
+
 ScanData::ScanData()
 {
   //points = NULL;
@@ -86,6 +94,7 @@ void ScanData::UpdateStats()
 //fflush(stdout);
 }
 
+#ifdef ENABLE_TEST_DATA
 void ScanData::dummy_data(EventReceiver *erx)
 {
     //freq_start = 26205000.0;
@@ -103,6 +112,7 @@ void ScanData::dummy_data(EventReceiver *erx)
 //fflush(stdout);
     UpdateStats();
 }
+#endif
 
 void ScanData::toDom(QDomDocument &doc,QDomElement &parent)
 {
@@ -171,10 +181,3 @@ bool ScanData::fromDom(QDomElement &e0)
     return true;
 }
 
-void Sample::fromRaw(double vf,double vr,double vz,double va)
-{
-    swr = (vf + vr) / (vf - vr);
-    Z = 50.0 * vz/va;
-    R = ((2500.0 + Z*Z) * swr)/(50.0 * (swr*swr + 1));
-    X = Z>R ? sqrt(Z*Z - R*R) : -sqrt(-Z*Z + R*R);
-}

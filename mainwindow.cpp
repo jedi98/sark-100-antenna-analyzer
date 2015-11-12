@@ -71,6 +71,9 @@ setlinebuf(stdout);
     connect(ui->fspan, SIGNAL(valueChanged(double)), this, SLOT(Slot_fspan_change(double)));
     connect(ui->point_count, SIGNAL(valueChanged(int)), this, SLOT(Slot_point_count_change(int)));
 
+    connect(ui->monStartBtn,SIGNAL(clicked()),this,SLOT(Slot_monStart_click()));
+    connect(ui->monStopBtn,SIGNAL(clicked()),this,SLOT(Slot_monStop_click()));
+
     QCheckBox *ctrls[] = {ui->plotz_chk,ui->plotx_chk,ui->plotr_chk,NULL};
     for (int i=0; ctrls[i]; i++)
         connect(ctrls[i], SIGNAL(stateChanged(int)), this, SLOT(Slot_plot_change(int)));
@@ -83,12 +86,19 @@ setlinebuf(stdout);
 
     ui->scan_data->setHorizontalHeaderLabels(QStringList() << "freq" << "SWR" << "Z" << "R" << "X");
 
+#ifdef ENABLE_TEST_DATA
     Slot_scanDummyBtn_click();
+#else
+    ui->scanDummyBtn->setVisible(false);
+#endif
 
     ui->canvas1->cursor = ui->cursor;
 
     ui->tabWidget->setCurrentIndex(1);
-    ui->tabWidget->setTabEnabled(0,false);
+    //ui->tabWidget->setTabEnabled(0,false);
+
+    montimer.setParent(this);
+    connect(&montimer, SIGNAL(timeout()), this, SLOT(Slot_montimer_timeout()));
 }
 
 
@@ -204,6 +214,7 @@ void MainWindow::Slot_scanBtn_click()
     draw_graph1();
 }
 
+#ifdef ENABLE_TEST_DATA
 void MainWindow::Slot_scanDummyBtn_click()
 {
     scandata.freq_start = (ui->fcentre->value()-ui->fspan->value()/2.0)*1000000;
@@ -215,11 +226,17 @@ void MainWindow::Slot_scanDummyBtn_click()
     populate_table();
     draw_graph1();
 }
+#endif
 
 void MainWindow::Slot_cursor_move(double pos)
 {
 //printf("pos=%lf\n",pos);
-    Sample *sample = &scandata.points[pos*(double)(scandata.points.size()-1)];
+    int n = pos*(double)(scandata.points.size()-1);
+
+    if (n<0 || n>=scandata.GetPointCount())
+        return;
+
+    Sample *sample = &scandata.points[n];
 
     ui->cursor_disp->setText(QString("f=%1MHz, swr=%2, Z=%3%4")
             .arg(sample->freq/1000000)
@@ -481,4 +498,75 @@ void MainWindow::Slot_copy()
              .arg(scandata.points[i].X);
 
   qApp->clipboard()->setText(txt);
+}
+
+void MainWindow::Slot_monStart_click()
+{
+    ui->SWR_Bar->vmin = ui->SWR_Bar->vorig = 1;
+    ui->SWR_Bar->vmax = 10;
+    ui->SWR_Bar->SetIncAuto();
+    ui->SWR_Bar->value = 1;
+
+    ui->Z_Bar->vmin = 0;
+    ui->Z_Bar->vmax = 200;
+    ui->Z_Bar->value = 50;
+    ui->Z_Bar->SetIncAuto();
+
+    ui->R_Bar->vmin = 0;
+    ui->R_Bar->vmax = 200;
+    ui->R_Bar->value = 50;
+    ui->R_Bar->SetIncAuto();
+
+    ui->X_Bar->vmin = -100;
+    ui->X_Bar->vmax = 200;
+    ui->X_Bar->value = 0;
+    ui->X_Bar->SetIncAuto();
+
+    if (link->IsUp())
+    {
+        link->Cmd_Freq((long)(ui->monfreq->value()*1000000),this);
+        link->Cmd_On(this);
+    }
+
+    montimer.start((long)(ui->monrate->value()));
+}
+
+void MainWindow::Slot_monStop_click()
+{
+    montimer.stop();
+
+    if (link->IsUp())
+    {
+        link->Cmd_Off(this);
+    }
+}
+
+void MainWindow::Slot_montimer_timeout()
+{
+    Sample sample;
+
+    if (link->IsUp())
+    {
+        link->Cmd_Raw(sample, this);
+
+    ui->SWR_Bar->value = sample.swr;
+    //ui->SWR_Bar->value += 1.0;
+    //if (ui->SWR_Bar->value>ui->SWR_Bar->vmax) ui->SWR_Bar->value=ui->SWR_Bar->vmin;
+    ui->SWR_lbl->setText(QString("%1:1").arg(sample.swr, 0,'f',1));
+    ui->SWR_Bar->update();
+
+    ui->Z_Bar->value = sample.Z;
+    //ui->Z_Bar->value += 15.0;
+    //if (ui->Z_Bar->value>ui->Z_Bar->vmax) ui->Z_Bar->value=ui->Z_Bar->vmin;
+    ui->Z_lbl->setText(QString("%1").arg(sample.Z, 0,'f',1));
+    ui->Z_Bar->update();
+
+    ui->R_Bar->value = sample.R;
+    ui->R_lbl->setText(QString("%1").arg(sample.R, 0,'f',1));
+    ui->R_Bar->update();
+
+    ui->X_Bar->value = sample.X;
+    ui->X_lbl->setText(QString("%1").arg(sample.X, 0,'f',1));
+    ui->X_Bar->update();
+    }
 }

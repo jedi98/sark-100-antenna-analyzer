@@ -53,10 +53,13 @@ private:
     void fromDom(QDomElement &e0);
 
     Ui::MainWindow *ui;
+    QTimer montimer;
 
 private slots:
     void Slot_scanBtn_click();
+#ifdef ENABLE_TEST_DATA
     void Slot_scanDummyBtn_click();
+#endif
     void Slot_cursor_move(double pos);
     void Slot_band_change(int idx);
     void Slot_fcentre_change(double v);
@@ -70,6 +73,9 @@ private slots:
     void Slot_Settings();
     void Slot_about();
     void Slot_copy();
+    void Slot_monStart_click();
+    void Slot_monStop_click();
+    void Slot_montimer_timeout();
 };
 
 #endif // MAINWINDOW_H
