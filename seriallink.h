@@ -8,7 +8,7 @@ and/or modify it under the terms of the GNU General Public License as
 published by the Free Software Foundation, either version 3 of the
 License, or (at your option) any later version.
 
-Sark-100-antenna-analyzerr is distributed in the hope that it will be
+Sark-100-antenna-analyzer is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty
 of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -46,12 +46,13 @@ public:
     void TxCmd(const char *cmd);
 
     void Cmd_Scan(long fstart, long fend, long fstep, bool useraw, EventReceiver *erx);
-    void Cmd_On(EventReceiver *erx);
-    void Cmd_Off(EventReceiver *erx);
-    void Cmd_Freq(long f, EventReceiver *erx);
-    void Cmd_Raw(Sample &sample, EventReceiver *erx);
+    void Cmd_On();
+    void Cmd_Off();
+    void Cmd_Freq(long f);
+    void Cmd_Raw(Sample &sample);
 
 protected:
+    int RxResponse1();
 };
 
 #endif // SERIALLINK_H

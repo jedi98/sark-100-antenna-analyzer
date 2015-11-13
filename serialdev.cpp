@@ -8,7 +8,7 @@ and/or modify it under the terms of the GNU General Public License as
 published by the Free Software Foundation, either version 3 of the
 License, or (at your option) any later version.
 
-Sark-100-antenna-analyzerr is distributed in the hope that it will be
+Sark-100-antenna-analyzer is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty
 of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -82,8 +82,10 @@ int SerialDev::RxFlush()
 {
 
     pollfd fds[] = {{devfd, POLLIN, 0 }};
-    int timeout = 500;    //500msec, move somewhere
+    int timeout = 50;    //500msec, move somewhere
     int pstatus,rstatus;
+
+printf("%ld> RxFlush\n",time(NULL));
 
     for (rxbufflen=0;;)
     {
@@ -105,7 +107,7 @@ int SerialDev::RxFlush()
                     }
                     else
                     {
-printf("RxFlush: %c\n",rxbuff[rxbufflen]);
+//printf("%ld> RxFlush: %c\n",time(NULL),rxbuff[rxbufflen]);
                     }
                 }
         }
@@ -143,7 +145,7 @@ int SerialDev::RxLine()
                     }
                     else
                     {
-//printf("RxLine: c=%c (0x%02x)\n",rxbuff[rxbufflen],rxbuff[rxbufflen]);
+//printf("%ld> RxLine: c=%c (0x%02x)\n",time(NULL),rxbuff[rxbufflen],rxbuff[rxbufflen]);
                         switch (rxbuff[rxbufflen])
                         {
                         case '\r':  break;

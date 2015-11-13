@@ -23,7 +23,6 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPainter>
 
 #include "config.h"
-//#include "scandata.h"
 #include "bargraph.h"
 
 //extern ScanData scandata;
@@ -49,6 +48,8 @@ BarGraph::BarGraph(QWidget *parent) :
 
     font = QFont("Arial",9);
     font_h = QFontMetrics(font).height();
+
+    //setAutoFillBackground(true);
 }
 
 BarGraph::~BarGraph()
@@ -70,18 +71,18 @@ void BarGraph::Draw(QPainter &painter)
     double scale;
     int x/*,y*/;
 
-    int xo = margin+font_h, yo=height()-margin-10-font_h,
-            h=height()-2*(margin)-10-font_h,
+    int xo = margin+font_h, yo=height()-margin-6-font_h,
+            h=height()-2*(margin)-6-font_h,
             w=width()-2*margin-2*font_h;
 
     painter.setPen(Qt::NoPen);
     //painter.setPen(pen);
     painter.setBrush(brush);
-    //painter.setFont(font);
+    painter.setFont(font);
 
 //Bar
     scale = (w) / (vmax-vmin);
-    painter.drawRect(xo+(vorig-vmin)*scale,yo,(value-vorig)*scale,-h);
+    painter.drawRect(xo+(vorig-vmin)*scale,yo,(constrain(value,vmin,vmax)-vorig)*scale,-h);
 
 //Scale
     painter.setPen(pen);
@@ -95,10 +96,10 @@ void BarGraph::Draw(QPainter &painter)
             x=xo + (v-vmin)*scale;
         //printf("x=%d\n",x);
         //printf("v=%f\n",v);
-            painter.drawLine(x,yo,x,yo + 10);
+            painter.drawLine(x,yo,x,yo + 6);
 
             x=x - QFontMetrics(font).boundingRect(s).width()/2;
-            painter.drawText(x,yo + 10 + font_h,s);
+            painter.drawText(x,yo + 6 + font_h,s);
         }
 
 }
@@ -110,7 +111,8 @@ void BarGraph::paintEvent(QPaintEvent *)
     ////////////////////
 
     painter.setBackgroundMode(Qt::OpaqueMode); //??
-    painter.setBackground(Qt::white);
+    //painter.setBackground(Qt::white);
+    //painter.setAutoFillBackground(true);
     painter.eraseRect(painter.viewport());
 
     painter.setBackgroundMode(Qt::TransparentMode); //??

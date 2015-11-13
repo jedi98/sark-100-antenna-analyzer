@@ -8,7 +8,7 @@ and/or modify it under the terms of the GNU General Public License as
 published by the Free Software Foundation, either version 3 of the
 License, or (at your option) any later version.
 
-Sark-100-antenna-analyzerr is distributed in the hope that it will be
+Sark-100-antenna-analyzer is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty
 of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -23,10 +23,8 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include <QWidget>
 #include <QPen>
 #include <QBrush>
-//#include <QMouseEvent>
 
-//#include "graph.h"
-//#include "graphcursor.h"
+#define constrain(v,v1,v2) ((v)<(v1)?v1:((v)>(v2)?v2:v))
 
 class BarGraph : public QWidget
 {
@@ -35,13 +33,6 @@ public:
     explicit BarGraph(QWidget *parent = 0);
     ~BarGraph();
 
-    //GraphCursor *cursor;
-
-    //Graph graph;
-    //GraphScale *xscale,*yscale1, *yscale2;
-    //GraphTrace *swrtrace, *ztrace, *xtrace, *rtrace;
-    //GraphVertLine *swrminline;
-    //GraphHorizLine *ZZeroLine, *ZTargetline,*SWRTargetline;
     void Draw(QPainter &painter);
     void SetIncAuto();
 
@@ -50,18 +41,14 @@ public:
     QBrush brush;
     double vmin, vmax, vinc, value, labdiv, vorig;
     QString labsuffix;
-    QFont font;
-
-signals:
-    //void cursorMoved(double pos);
 
 public slots:
 
 private:
+    QFont font;
     int font_h;
 
     void paintEvent(QPaintEvent *);
-    //void mouseMoveEvent(QMouseEvent *ev);
 };
 
 #endif // BARGRAPH_H

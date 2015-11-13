@@ -8,7 +8,7 @@ and/or modify it under the terms of the GNU General Public License as
 published by the Free Software Foundation, either version 3 of the
 License, or (at your option) any later version.
 
-Sark-100-antenna-analyzerr is distributed in the hope that it will be
+Sark-100-antenna-analyzer is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty
 of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -80,7 +80,7 @@ setlinebuf(stdout);
 
     link = new SerialLink("/dev/ttyUSB0",57600);
     if (link->IsUp())
-        link->Cmd_Off(this);
+        link->Cmd_Off();
 
     ui->band_cb->setCurrentIndex(16);
 
@@ -114,6 +114,7 @@ void MainWindow::RaiseEvent(event_t event,int arg)
     {
       case progress_event:
         ui->progressBar->setValue(arg);
+        //draw_graph1();
         break;
     }
 }
@@ -207,7 +208,7 @@ void MainWindow::Slot_scanBtn_click()
                   (long)((scandata.freq_end-scandata.freq_start)/scandata.GetPointCount()),
                   ui->useraw_chk->checkState()==Qt::Checked,
                   this);
-        link->Cmd_Off(this);
+        link->Cmd_Off();
     }
 
     populate_table();
@@ -463,7 +464,7 @@ void MainWindow::Slot_menuDevice_Select(QAction *act)
   link = new SerialLink(QString("/dev/" + act->text()).toLatin1().data(),57600);
 
   if (link->IsUp())
-      link->Cmd_Off(this);
+      link->Cmd_Off();
 }
 
 void MainWindow::Slot_about()
@@ -507,16 +508,19 @@ void MainWindow::Slot_monStart_click()
     ui->SWR_Bar->SetIncAuto();
     ui->SWR_Bar->value = 1;
 
+    ui->Z_Bar->brush = QBrush(qRgb(255,85,0));
     ui->Z_Bar->vmin = 0;
     ui->Z_Bar->vmax = 200;
     ui->Z_Bar->value = 50;
     ui->Z_Bar->SetIncAuto();
 
+    ui->R_Bar->brush = QBrush(Qt::darkGreen);
     ui->R_Bar->vmin = 0;
     ui->R_Bar->vmax = 200;
     ui->R_Bar->value = 50;
     ui->R_Bar->SetIncAuto();
 
+    ui->X_Bar->brush = QBrush(Qt::red);
     ui->X_Bar->vmin = -100;
     ui->X_Bar->vmax = 200;
     ui->X_Bar->value = 0;
@@ -524,10 +528,11 @@ void MainWindow::Slot_monStart_click()
 
     if (link->IsUp())
     {
-        link->Cmd_Freq((long)(ui->monfreq->value()*1000000),this);
-        link->Cmd_On(this);
+        link->Cmd_Freq((long)(ui->monfreq->value()*1000000));
+        link->Cmd_On();
     }
 
+    Slot_montimer_timeout();
     montimer.start((long)(ui->monrate->value()));
 }
 
@@ -536,9 +541,7 @@ void MainWindow::Slot_monStop_click()
     montimer.stop();
 
     if (link->IsUp())
-    {
-        link->Cmd_Off(this);
-    }
+        link->Cmd_Off();
 }
 
 void MainWindow::Slot_montimer_timeout()
@@ -547,26 +550,22 @@ void MainWindow::Slot_montimer_timeout()
 
     if (link->IsUp())
     {
-        link->Cmd_Raw(sample, this);
+        link->Cmd_Raw(sample);
 
-    ui->SWR_Bar->value = sample.swr;
-    //ui->SWR_Bar->value += 1.0;
-    //if (ui->SWR_Bar->value>ui->SWR_Bar->vmax) ui->SWR_Bar->value=ui->SWR_Bar->vmin;
-    ui->SWR_lbl->setText(QString("%1:1").arg(sample.swr, 0,'f',1));
-    ui->SWR_Bar->update();
+        ui->SWR_lbl->setText(QString("%1:1").arg(sample.swr, 0,'f',1));
+        ui->SWR_Bar->value = sample.swr;
+        ui->SWR_Bar->update();
 
-    ui->Z_Bar->value = sample.Z;
-    //ui->Z_Bar->value += 15.0;
-    //if (ui->Z_Bar->value>ui->Z_Bar->vmax) ui->Z_Bar->value=ui->Z_Bar->vmin;
-    ui->Z_lbl->setText(QString("%1").arg(sample.Z, 0,'f',1));
-    ui->Z_Bar->update();
+        ui->Z_lbl->setText(QString("%1").arg(sample.Z, 0,'f',1));
+        ui->Z_Bar->value = sample.Z;
+        ui->Z_Bar->update();
 
-    ui->R_Bar->value = sample.R;
-    ui->R_lbl->setText(QString("%1").arg(sample.R, 0,'f',1));
-    ui->R_Bar->update();
+        ui->R_lbl->setText(QString("%1").arg(sample.R, 0,'f',1));
+        ui->R_Bar->value = sample.R;
+        ui->R_Bar->update();
 
-    ui->X_Bar->value = sample.X;
-    ui->X_lbl->setText(QString("%1").arg(sample.X, 0,'f',1));
-    ui->X_Bar->update();
+        ui->X_lbl->setText(QString("%1").arg(sample.X, 0,'f',1));
+        ui->X_Bar->value = sample.X;
+        ui->X_Bar->update();
     }
 }
