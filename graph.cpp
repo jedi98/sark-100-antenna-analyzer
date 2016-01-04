@@ -170,10 +170,12 @@ void GraphScale::SetIncAuto()
 {
     double n,span=this->vmax-this->vmin;
     n = pow(10.0,floor(log10(span)));
-    if (span<=n) { this->vinc=n/10.0; return; } else n*=2.0;
-    if (span<=n) { this->vinc=n/10.0; return; } else n*=2.5;
-    if (span<=n) { this->vinc=n/10.0; return; } else n*=2;
+    if (span<=n) { this->vinc=n/10.0; goto done; } else n*=2.0;
+    if (span<=n) { this->vinc=n/10.0; goto done; } else n*=2.5;
+    if (span<=n) { this->vinc=n/10.0; goto done; } else n*=2;
     this->vinc=n/10.0;
+done:
+    if (this->vinc==0.0) vinc=1.0; //Safty setting for vinc to prevent infinite loop / dev by 0 downstream.
 }
 
 void GraphScale::Expand(double min,double max)

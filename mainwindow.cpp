@@ -32,7 +32,7 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_mainwindow.h"
 
 const Version
-    MainWindow::version = Version(0,9,10,"rc1");
+    MainWindow::version = Version(0,9,11,"rc2");
 
 ScanData scandata;
 
