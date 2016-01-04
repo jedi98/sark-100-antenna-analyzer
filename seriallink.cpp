@@ -153,6 +153,10 @@ void SerialLink::Cmd_Scan(long fstart, long fend, long fstep, bool useraw, Event
 
     scandata.points.resize(0);
 
+    //TODO: clean this up, why can I not set it globally?
+//std::setlocale(LC_ALL, "sv_SE");
+    std::setlocale(LC_ALL, "C");    //Need sscanf() to use default locale for number parsing.
+
     for (;state<10;)
     {
         r = RxLine();
@@ -248,6 +252,9 @@ void SerialLink::Cmd_Raw(Sample &sample)
     RxFlush();
 
     TxCmd("raw\r");
+
+    //TODO: clean this up, why can I not set it globally?
+    std::setlocale(LC_ALL, "C");    //Need sscanf() to use default locale for number parsing.
 
     for (;state<10;)
     {

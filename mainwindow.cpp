@@ -18,6 +18,7 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <stdio.h>
+#include <locale.h>
 
 #include <QDir>
 #include <QFileDialog>
@@ -32,7 +33,7 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_mainwindow.h"
 
 const Version
-    MainWindow::version = Version(0,9,11,"rc2");
+    MainWindow::version = Version(0,10,13,"");
 
 ScanData scandata;
 
@@ -41,7 +42,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 setlinebuf(stdout);
-
+//{
+//char *p;
+//printf("setlocale=%p\n",p=setlocale(LC_ALL, "sv_SE.UTF-8"));
+//if (p) printf("\t%s\n",p);
+//std::setlocale(LC_ALL, "sv_SE");
+//}
     Config::read();
 
     ui->setupUi(this);
@@ -99,6 +105,8 @@ setlinebuf(stdout);
 
     montimer.setParent(this);
     connect(&montimer, SIGNAL(timeout()), this, SLOT(Slot_montimer_timeout()));
+
+//std::setlocale(LC_ALL, "sv_SE.UTF-8");
 }
 
 

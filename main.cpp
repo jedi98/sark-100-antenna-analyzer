@@ -20,8 +20,13 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include "mainwindow.h"
 #include <QApplication>
 
+#include <locale.h>
+
 int main(int argc, char *argv[])
 {
+    //setlocale(LC_NUMERIC, "C");
+    //setlocale(LC_ALL, "fr_FR.UTF-8");
+
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
