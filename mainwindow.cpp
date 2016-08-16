@@ -33,7 +33,7 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_mainwindow.h"
 
 const Version
-    MainWindow::version = Version(0,10,13,"");
+    MainWindow::version = Version(0,11,14,"");
 
 ScanData scandata;
 
@@ -341,7 +341,7 @@ void MainWindow::Slot_plot_change(int)
 
 void MainWindow::Slot_Load()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,"Open Layout",Config::dir_data,"Scan Data (*.analyzer)");
+    QString fileName = QFileDialog::getOpenFileName(this,"Open Layout",Config::dir_data,"Scan Data (*.analyzer);;All files (*)");
     if (!fileName.isEmpty())
     {
         QDomDocument doc( "AnalyzerML" );
@@ -422,12 +422,19 @@ void MainWindow::toDom(QDomDocument &doc)
 
 void MainWindow::Slot_Save()
 {
-    QString filename = QFileDialog::getSaveFileName(this,"Save Scan Data As",Config::dir_data,"Scan Data (*.analyzer)");
+    QFileInfo *fi;
+
+    QString filename = QFileDialog::getSaveFileName(this,"Save Scan Data As",Config::dir_data,"Scan Data (*.analyzer);;All files (*)");
     if (filename.isEmpty())
       return;
 
 //    if (!copy)
 //      setCurrentFile(fileName);	// Set filename & layoutname here because layoutname is written to the file.
+
+    fi = new QFileInfo(filename);
+    if (fi->completeSuffix().isEmpty())
+      filename += ".analyzer";
+    delete fi;
 
     QDomDocument doc( "AnalyzerML" );
 
@@ -444,12 +451,13 @@ void MainWindow::Slot_Save()
     file.close();
     //statusBar()->showMessage(tr("Data saved"), 2000);
 
-    QFileInfo fi(filename);
-    if (Config::dir_data != fi.dir().path())
+    fi = new QFileInfo(filename);
+    if (Config::dir_data != fi->dir().path())
     {
-      Config::dir_data = fi.dir().path();
+      Config::dir_data = fi->dir().path();
       Config::write();
     }
+    delete fi;
 }
 
 void MainWindow::Slot_menuDevice_Show()
