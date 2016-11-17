@@ -33,7 +33,7 @@ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_mainwindow.h"
 
 const Version
-    MainWindow::version = Version(0,11,14,"");
+    MainWindow::version = Version(0,11,15,"");
 
 ScanData scandata;
 
@@ -507,7 +507,7 @@ void MainWindow::Slot_copy()
   QString txt("freq\tSWR\tZ\tR\tX\n");
 
   for (unsigned int i=0;i<scandata.points.size();i++)
-     txt += QString("%1\t%2\t%3\t%4\n")
+     txt += QString("%1\t%2\t%3\t%4\t%5\n")
              .arg(scandata.points[i].freq/1000000.0,0,'f')
              .arg(scandata.points[i].swr)
              .arg(scandata.points[i].Z)
